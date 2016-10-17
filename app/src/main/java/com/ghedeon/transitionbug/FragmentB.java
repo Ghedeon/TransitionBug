@@ -1,11 +1,9 @@
 package com.ghedeon.transitionbug;
 
 
-import android.os.Build;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
 import android.transition.Transition;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +18,7 @@ public class FragmentB extends Fragment {
     }
 
     public static FragmentB newInstance() {
-        FragmentB fragment = new FragmentB();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+        return new FragmentB();
     }
 
     @Override
@@ -32,18 +27,16 @@ public class FragmentB extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_b, container, false);
 
         imageB = rootView.findViewById(R.id.imageB);
-        ViewCompat.setTransitionName(imageB, "transition");
+        imageB.setTransitionName("transition");
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            final Transition transition = (Transition) getSharedElementEnterTransition();
-            if (transition != null) {
-                transition.addListener(new TransitionListenerAdapter() {
-                    @Override
-                    public void onTransitionEnd(@NonNull final Transition transition) {
-                        imageB.setVisibility(View.INVISIBLE);
-                    }
-                });
-            }
+        final Transition transition = getSharedElementEnterTransition();
+        if (transition != null) {
+            transition.addListener(new TransitionListenerAdapter() {
+                @Override
+                public void onTransitionEnd(@NonNull final Transition transition) {
+                    imageB.setVisibility(View.INVISIBLE);
+                }
+            });
         }
 
         return rootView;

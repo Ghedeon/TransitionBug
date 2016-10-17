@@ -1,9 +1,8 @@
 package com.ghedeon.transitionbug;
 
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
 import android.transition.ChangeBounds;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +15,7 @@ public class FragmentA extends Fragment {
     }
 
     public static FragmentA newInstance() {
-        FragmentA fragment = new FragmentA();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+        return new FragmentA();
     }
 
     @Override
@@ -28,7 +24,7 @@ public class FragmentA extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_a, container, false);
 
         final View imageA = rootView.findViewById(R.id.imageA);
-        ViewCompat.setTransitionName(imageA, "transition");
+        imageA.setTransitionName("transition");
 
         imageA.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +34,12 @@ public class FragmentA extends Fragment {
                     final ChangeBounds changeBounds = new ChangeBounds();
 
                     // MAGIC!
-                    changeBounds.addListener(new TransitionListenerAdapter());
+                    /*changeBounds.addListener(new TransitionListenerAdapter(){
+                        @Override
+                        public void onTransitionEnd(@NonNull final Transition transition) {
+                            super.onTransitionEnd(transition);
+                        }
+                    });*/
 
                     fragmentB.setSharedElementEnterTransition(changeBounds);
                 }
